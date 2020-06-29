@@ -1,0 +1,180 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} 
+
+%---enable russian----
+
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+
+% PROBABILITY SYMBOLS
+\newcommand*\PROB\Pr 
+\DeclareMathOperator*{\EXPECT}{\mathbb{E}}
+
+
+% Sets, Rngs, ets 
+\newcommand{\N}{{{\mathbb N}}}
+\newcommand{\Z}{{{\mathbb Z}}}
+\newcommand{\R}{{{\mathbb R}}}
+\newcommand{\Zp}{\ints_p} % Integers modulo p
+\newcommand{\Zq}{\ints_q} % Integers modulo q
+\newcommand{\Zn}{\ints_N} % Integers modulo N
+
+% Landau 
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand*{\OLandau}{\bigO}
+\newcommand*{\WLandau}{\Omega}
+\newcommand*{\xOLandau}{\widetilde{\OLandau}}
+\newcommand*{\xWLandau}{\widetilde{\WLandau}}
+\newcommand*{\TLandau}{\Theta}
+\newcommand*{\xTLandau}{\widetilde{\TLandau}}
+\newcommand{\smallo}{o} %technically, an omicron
+\newcommand{\softO}{\widetilde{\bigO}}
+\newcommand{\wLandau}{\omega}
+\newcommand{\negl}{\mathrm{negl}} 
+
+% Misc
+\newcommand{\eps}{\varepsilon}
+\newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
+
+ 
+\newcommand{\handout}[5]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 5.78in { {\bf Научно-исследовательская практика} \hfill #2 }
+      \vspace{4mm}
+      \hbox to 5.78in { {\Large \hfill #5  \hfill} }
+      \vspace{2mm}
+      \hbox to 5.78in { {\em #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}
+
+\newcommand{\lecture}[4]{\handout{#1}{#2}{#3}{Scribe: #4}{Быстрое умножение методом Тоома-Кука #1}}
+
+\newtheorem{theorem}{Теорема}
+\newtheorem{lemma}{Лемма}
+\newtheorem{definition}{Определение}
+\newtheorem{corollary}{Следствие}
+\newtheorem{fact}{Факт}
+
+% 1-inch margins
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+
+\begin{document}
+
+\lecture{}{Лето 2020}{}{Иванов Артём Евгеньевич}
+
+\section{Теория}
+
+\textbf{ Алгоритм Тоома-Кука } — алгоритм, предназначенный для умножения длинных целых чисел. Даны 2 длинных числа $a$ и $b$, алгоритм разбивает их на $k$ маленьких чатей длины $l$ и проводит вычисления.  Toom-3 - это частный случай алгоритма Тоома-Кука, где k = 3. Toom-3 сокращает количество умножений с 9 до 5 и выполняется за $\mathcal{O}(n^{log(5)/log(3)})\approx\mathcal{O(}n^{1.46})$
+
+\section{Алгоритм}
+
+\begin{algorithm}[ph]
+	\caption{Быстрое умножение методом Тоома-Кука (Toom-3)}
+	\label{alg:AlgName}
+	\textbf{Ввод:} целые n-разрядные  X и Y, базис разложения B  \\
+	\textbf{Вывод:} $Z = X\cdot Y$
+	
+	\begin{algorithmic}
+		
+		\State 1.	 Разложить X и Y по базису B
+			\State \ \ \ \ \ \	$X =  X_2B^2 +X_1B+X_0$ 
+			\State \ \ \ \ \ \	$Y =  Y_2B^2 +Y_1B+Y_0$ 
+		\State	2. Вычислить	
+			\State \ \ \ \ \ \	$r_0 = X_0 - 2X_1+4X_2$
+	  		\State \ \ \ \ \ \	$r_1 = X_0 - X_1+X_2$
+			\State \ \ \ \ \ \	$r_2 = X_0$
+	  		\State \ \ \ \ \ \	$r_3 = X_0 +X_1+X_2$
+			\State \ \ \ \ \ \	$r_4 = X_0 + 2X_1+4X_2$
+	  		\State \ \ \ \ \ \        $s_0 = Y_0 - 2Y_1+4Y_2$
+	  		\State \ \ \ \ \ \	$s_1 = Y_0 - Y_1+Y_2$
+			\State \ \ \ \ \ \	$s_2 = Y_0$
+	  		\State \ \ \ \ \ \	$s_3 = Y_0 +Y_1+Y_2$
+			\State \ \ \ \ \ \	$s_4 = Y_0 + 2Y_1+4Y_2$
+		
+		\State 3. Для i от 0 до 4 вычислить
+			\State \ \ \ \ \ \  	$t_i = r_is_i$
+		\State	4. Вычислить
+			\State \ \ \ \ \ \	$Z_0 = t_2$
+	  		\State \ \ \ \ \ \	$Z_1 = t_0/12 - 2t_1/3+2t_3/3-t_4/12$
+			\State \ \ \ \ \ \	$Z_2 = -t_0/24 + 2t_1/3 -5t_2/4+2t_3/3-t_4/24$
+	  		\State \ \ \ \ \ \	$Z_3 = -t_0/12 + t_1/6-t_3/6+t_4/12$
+			\State \ \ \ \ \ \	$Z_4 = t_0/24 - t_1/6 +t_2/4-t_3/6+t_4/24$	
+		\State	5. Восстановить Z по формуле
+			\State \ \ \ \ \ \	$Z =Z_4B^4+  Z_3B^3+Z_2B^2 +Z_1B+Z_0$ 
+		\State	6.
+			\Return{Z}
+	\end{algorithmic}
+
+\end{algorithm}
+
+
+\section{Машина 1}
+Ноутбук:
+\\$\triangleright$ Процессор: \textbf{Intel(R) Core(TM) i7-7700HQ CPU @2.80 GHz (3.80 Ghz Turbo Boost) (4 ядра и 8 потоков)}
+\\$\triangleright$ Оперативная память: \textbf{8GB DDR4 2400 MHz }
+\\$\triangleright$ OC: \textbf{Windows 10 Home, версия 1909 (сборка 18363.657) }
+
+\section{Результаты}
+
+%Изменить
+\begin{tabular}{|c|c|c|c|}
+\hline
+X & Y & Sage Algorithm Time & My Algorithm Time\\
+\hline
+\hline
+$123^{421897}$ & $987^{436112}$ & 5.15s & 0.04s\\
+$12345^{421897}$ & $98765^{436112}$ & 13.70s & 0.09s\\
+$1234567^{421897}$ & $9876543^{436112}$ & 27.10s & 0.14s\\
+$123456789^{421897}$ & $987654321^{436112}$ & 44.50s & 0.19s\\
+$1234567891011^{421897}$ & $9876543210123^{436112}$ & 90.00s & 0.40s\\
+\hline
+\end{tabular}
+
+\section{Машина 2}
+Стационарный пк:
+\\$\triangleright$ Процессор: \textbf{Intel(R) Core(TM) i5-9600K CPU @3.70 GHz (4.60 Ghz Turbo Boost) (6 ядер и 6 потоков)}
+\\$\triangleright$ Оперативная память: \textbf{16GB DDR4 3200 MHz }
+\\$\triangleright$ OC: \textbf{Windows 10 Pro, версия 1903 (сборка 18362.239) }
+
+\section{Результаты}
+%изменить
+\begin{tabular}{|c|c|c|c|}
+\hline
+X & Y  & Sage Algorithm Time & My Algorithm Time\\
+\hline
+\hline
+$123^{421897}$ & $987^{436112}$ & 4.11s & 0.03s\\
+$12345^{421897}$ & $98765^{436112}$ & 11.10s & 0.07s\\
+$1234567^{421897}$ & $9876543^{436112}$ & 22.00s & 0.11s\\
+$123456789^{421897}$ & $987654321^{436112}$ & 34.90s & 0.14s\\
+$1234567891011^{421897}$ & $9876543210123^{436112}$ & 72.00s & 0.29s\\
+\hline
+\end{tabular}
+
+%Изменить
+\paragraph{Bibliography}:
+\\ $[1]$ Львовский С.М. - Набор и верстка в системе LATEX. 5-е изд. 2014.
+\\ $[2]$ Wikipedia: Wikipedia, The Free Encyclopedia [online], http://www.wikipedia.org, June 2020
+\\ $[3]$ Zimmermann P., Casamayou A., Cohen N. et al. - Computational Mathematics with SageMath. 2018
+\\ $[4]$ И.А. Панкратова Теоретико-числовые методы в криптографии
+\\ $[5]$ Richard Crandall, Carl Pomerance - Prime Numbers. A Computational Perspective. Second Edition
+
+\end{document}
