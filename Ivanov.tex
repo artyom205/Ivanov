@@ -38,6 +38,9 @@
 \newcommand{\eps}{\varepsilon}
 \newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
 
+\renewcommand{\algorithmicrequire}{\textbf{Ввод:}}
+\renewcommand{\algorithmicensure}{\textbf{Вывод:}}
+
  
 \newcommand{\handout}[5]{
   \noindent
@@ -82,17 +85,17 @@
 
 \section{Теория}
 
-\textbf{ Алгоритм Тоома-Кука } — алгоритм, предназначенный для умножения длинных целых чисел. Даны 2 длинных числа $a$ и $b$, алгоритм разбивает их на $k$ маленьких чатей длины $l$ и проводит вычисления.  Toom-3 - это частный случай алгоритма Тоома-Кука, где k = 3. Toom-3 сокращает количество умножений с 9 до 5 и выполняется за $\mathcal{O}(n^{log(5)/log(3)})\approx\mathcal{O(}n^{1.46})$
+\textbf{ Алгоритм Тоома-Кука } — алгоритм, предназначенный для умножения длинных целых чисел. Даны 2 длинных числа $a$ и $b$, алгоритм разбивает их на $k$ маленьких чатей длины $l$ и проводит вычисления.  Toom-3~\cite{Wiki} - это частный случай алгоритма Тоома-Кука, где k = 3. Toom-3 сокращает количество умножений с 9 до 5 и выполняется за $\mathcal{O}(n^{log(5)/log(3)})\approx\mathcal{O(}n^{1.46})$
 
 \section{Алгоритм}
 
 \begin{algorithm}[ph]
 	\caption{Быстрое умножение методом Тоома-Кука (Toom-3)}
 	\label{alg:AlgName}
-	\textbf{Ввод:} целые n-разрядные  X и Y, базис разложения B  \\
-	\textbf{Вывод:} $Z = X\cdot Y$
 	
 	\begin{algorithmic}
+		\Require{целые n-разрядные  X и Y, базис разложения B}
+		\Ensure{$Z = X\cdot Y$}
 		
 		\State 1.	 Разложить X и Y по базису B
 			\State \ \ \ \ \ \	$X =  X_2B^2 +X_1B+X_0$ 
@@ -134,7 +137,6 @@
 
 \section{Результаты}
 
-%Изменить
 \begin{tabular}{|c|c|c|c|}
 \hline
 X & Y & Sage Algorithm Time & My Algorithm Time\\
@@ -155,7 +157,6 @@ $1234567891011^{421897}$ & $9876543210123^{436112}$ & 90.00s & 0.40s\\
 \\$\triangleright$ OC: \textbf{Windows 10 Pro, версия 1903 (сборка 18362.239) }
 
 \section{Результаты}
-%изменить
 \begin{tabular}{|c|c|c|c|}
 \hline
 X & Y  & Sage Algorithm Time & My Algorithm Time\\
@@ -169,12 +170,17 @@ $1234567891011^{421897}$ & $9876543210123^{436112}$ & 72.00s & 0.29s\\
 \hline
 \end{tabular}
 
-%Изменить
-\paragraph{Bibliography}:
-\\ $[1]$ Львовский С.М. - Набор и верстка в системе LATEX. 5-е изд. 2014.
-\\ $[2]$ Wikipedia: Wikipedia, The Free Encyclopedia [online], http://www.wikipedia.org, June 2020
-\\ $[3]$ Zimmermann P., Casamayou A., Cohen N. et al. - Computational Mathematics with SageMath. 2018
-\\ $[4]$ И.А. Панкратова Теоретико-числовые методы в криптографии
-\\ $[5]$ Richard Crandall, Carl Pomerance - Prime Numbers. A Computational Perspective. Second Edition
+\begin{thebibliography}{5}
+\bibitem{Wiki}
+Wikipedia: Toom–Cook multiplication, https://en.wikipedia.org/wiki/Toom–Cook\_multiplication, August 2019.
+\bibitem{Lvovsiy}
+Львовский С.М. - Набор и верстка в системе LATEX. 5-е изд. 2014.
+\bibitem{Zimmerman}
+Zimmermann P., Casamayou A., Cohen N. et al. - Computational Mathematics with SageMath. 2018.
+\bibitem{Crandall}
+ Richard Crandall, Carl Pomerance - Prime Numbers. A Computational Perspective. Second Edition 597 c. 473-476.
+\bibitem{Pankratova}
+ И.А. Панкратова. Теоретико-числовые методы криптографии: Учебное пособие. Томск: Томский государственный университет, 2009. c. 25-29.
+\end{thebibliography}
 
 \end{document}
